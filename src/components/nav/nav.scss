@@ -1,0 +1,39 @@
+@import '../../static/variables.scss';
+
+.navigation {
+    width: 100%;
+    padding: 5px;
+    background-color: $grey-lighter;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .link {
+        text-decoration: none;
+        text-transform: uppercase;
+        margin: 0 1em;
+      
+        padding: 5px 10px;
+       
+
+        
+        color:$blue-default;
+        
+
+
+        &:hover {
+            box-shadow: 0 3px 2px -2px $blue-default;
+            
+        }
+
+        &.icon {
+           
+            font-size: 1em;
+            line-height: 1em;
+            height: 1em;;
+            font-weight: bold;
+            
+            
+        }
+    }
+}
