@@ -3,10 +3,10 @@ import { Switch, Route } from "react-router-dom";
 
 import Grid from "@material-ui/core/Grid";
 
-import Login from "./components/login";
-import Note from "./components/note";
-import NoteList from "./components/notelist";
-import Nav from "./components/nav/nav";
+import Login from "../login";
+import Note from "../note";
+import NoteList from "../notelist";
+import Nav from "../nav/nav";
 
 import "./App.scss";
 
