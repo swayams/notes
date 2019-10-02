@@ -1,0 +1,13 @@
+@import '../../static/variables.scss';
+
+.notes-list {
+    .add {
+        color: $green-default !important;
+        float: right;
+        cursor: pointer; 
+
+        &:hover {
+            color: darken($color: $green-default, $amount: 30%)
+        }
+    }
+}

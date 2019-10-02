@@ -6,7 +6,7 @@ export class User {
     displayName: string
     password: string
     notes: Note[]
-    constructor ( display: string, user: string, pass: string) {
+    constructor ( user: string, pass: string, display: string ) {
         this.userName = user
         this.password = pass
         this.displayName = display
@@ -28,8 +28,8 @@ export const UserService = ( ctx: LocaleContext) => {
 
     }
 
-    const validateUser = ( user: User): boolean => {
-        let thisUser = ctx.Users.filter( (u: User) => u.userName === user.userName && u.password === user.password )
+    const validateUser = ( username: string, password: string): boolean => {
+        let thisUser = ctx.Users.filter( (u: User) => u.userName === username && u.password === password )
         if( thisUser.length > 0) 
             return true
         else 

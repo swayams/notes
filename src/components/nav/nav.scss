@@ -5,13 +5,13 @@
     padding: 5px;
     background-color: $grey-lighter;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-end;
 
     .link {
         text-decoration: none;
         text-transform: uppercase;
-        margin: 0 1em;
+        margin: 0 5px;
       
         padding: 5px 10px;
        
