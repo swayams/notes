@@ -1,35 +1,44 @@
 import * as React from "react";
 import {
-  Grid,
   Card,
-  CardHeader,
   CardContent,
   Typography,
   CardActions,
-  Button
+  Button,
+  GridListTile
 } from "@material-ui/core";
 
 import { withRouter, RouteComponentProps } from "react-router";
+import './Note.scss'
+import { IService } from '../../entities/Notes';
 
+
+const classes = {
+  card: 'card',
+  btnGroup: 'action-group'
+}
 interface INoteProps extends RouteComponentProps{
-  index: number
+  id: number
   title: string;
   description: string;
+  service: IService
 }
 
 const Note: React.FC<INoteProps> = (props: INoteProps) => {
  
     const onUpdate = () => {
-         props.history.push('/note/')
+         props.history.push('/note/'+props.id)
     }
 
     const onDelete = () => {
-        
+
+        props.service.remove(props.id)
+        props.history.push('/notes')
     }
 
   return (
-    <Grid item xs={12}>
-      <Card raised={true}>
+    <GridListTile>
+      <Card raised={true} className={classes.card}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {props.title}
@@ -38,7 +47,7 @@ const Note: React.FC<INoteProps> = (props: INoteProps) => {
             {props.description}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions className={classes.btnGroup}>
           <Button size="small" color="primary" onClick={onUpdate}>
             update
           </Button>
@@ -47,7 +56,7 @@ const Note: React.FC<INoteProps> = (props: INoteProps) => {
           </Button>
         </CardActions>
       </Card>
-    </Grid>
+    </GridListTile>
   );
 };
 

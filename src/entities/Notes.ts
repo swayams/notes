@@ -14,32 +14,41 @@ export class Note {
     
 }
 
-const NotesService = (user: User, context: LocaleContext) => {
+export interface IService {
+    create: Function
+    update: Function
+    remove: Function
+    read: Function
+}
+
+export const NotesService = (user: User, context: LocaleContext) => {
 
 
-    const createNote = ( note: Note ) => {
+    const create = ( note: Note ) => {
         user.notes.push(note)
         context.execute()
     }
-    const updateNote = ( index: number, note: Note) => {
+    const update = ( index: number, note: Note) => {
         user.notes[index] = note;
         context.execute()
     }
 
-    const deleteNote = ( index: number ) => {
+    const remove = ( index: number ) => {
         user.notes.splice( index, 1)
         context.execute()
     }
 
-    const getNote = ( index: number ) => {
+    const read = ( index: number ) => {
         return user.notes[index]
     }
 
 
-    return {
-        create: createNote,
-        update: updateNote,
-        delete: deleteNote,
-        read: getNote
+    let svc: IService =  {
+        create: create,
+        update: update,
+        remove: remove,
+        read: read
     }
+
+    return svc
 }

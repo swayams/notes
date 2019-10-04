@@ -1,61 +1,79 @@
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
+import { withRouter, RouteComponentProps } from "react-router";
 import { Grid, TextField, Button } from "@material-ui/core";
-import { LocaleContext } from "../../entities/Context";
-import { User } from "../../entities/User";
-
 import "./form.scss";
+import { IService, Note } from "../../entities/Notes";
 
 export interface MatchParams {
   id: string;
 }
 
-export interface INoteProps extends RouteComponentProps<MatchParams> {}
+export interface INoteProps extends RouteComponentProps<MatchParams> {
+  svc: IService;
+}
 
 export interface INoteState {
-  title: string;
-  description: string;
-  context: LocaleContext;
-  user: User;
+  //should enforce immutability
+  note: Note;
 }
 
 const classes = {
   button: "button",
   root: "note-form",
   textField: "text",
-  buttonGroup: 'button-group',
-
+  buttonGroup: "button-group"
 };
 
-class Note extends React.Component<INoteProps, INoteState> {
+const EMPTY_NOTE = new Note("", "");
+
+class NoteForm extends React.Component<INoteProps, INoteState> {
   constructor(props: INoteProps) {
     super(props);
-    this.state = {
-      title: "",
-      description: "",
-      context: new LocaleContext(""),
-      user: new User("", "", "")
-    };
+    let note = EMPTY_NOTE;
+    if (this.props.match && this.props.match.params.id) {
+      note = this.props.svc.read(this.props.match.params.id);
+    }
+
+    this.state = { note: {...note} };
+  }
+
+  componentDidMount() {
+    if (!this.props.svc.read(1)) {
+      this.props.history.push("/");
+    }
   }
 
   _handleDelete = () => {
-    this.setState({ title: "", description: "" });
-    this.props.history.push('/notes')
+    this.setState({ note: EMPTY_NOTE });
+    this.props.history.push("/notes");
   };
 
-  _onSubmit = () => {}
+  _onSubmit = () => {
+    const { title, description } = { ...this.state.note };
+
+    const note = new Note(title, description);
+    const service = this.props.svc;
+    if (this.props.match && this.props.match.params.id) {
+      service.update(this.props.match.params.id, note);
+    } else {
+      service.create(note);
+    }
+
+    this.props.history.push("/notes");
+  };
 
   _handleChange = (event: React.ChangeEvent) => {
     let element = event.target as HTMLInputElement;
-
+    let note = this.state.note;
     //advanced typings required for using [key]: value. Don't have time !
-
     if (element.id === "title") {
-      this.setState({ title: element.value });
+      note.title = element.value;
     } else {
-      this.setState({ description: element.value });
+      note.description = element.value;
     }
+    this.setState({ note: note });
   };
+
   render() {
     return (
       <Grid
@@ -70,7 +88,7 @@ class Note extends React.Component<INoteProps, INoteState> {
             id="title"
             label="Title"
             className={classes.textField}
-            value={this.state.title}
+            value={this.state.note.title}
             onChange={this._handleChange}
             fullWidth
           />
@@ -83,7 +101,7 @@ class Note extends React.Component<INoteProps, INoteState> {
             rows={4}
             rowsMax={7}
             onChange={this._handleChange}
-            value={this.state.description}
+            value={this.state.note.description}
             fullWidth
           />
         </Grid>
@@ -103,7 +121,7 @@ class Note extends React.Component<INoteProps, INoteState> {
               fullWidth
               onClick={this._onSubmit}
             >
-              Submit
+              Save
             </Button>
           </Grid>
           <Grid item xs={5} md={4}>
@@ -123,4 +141,4 @@ class Note extends React.Component<INoteProps, INoteState> {
   }
 }
 
-export default Note;
+export default withRouter(NoteForm);

@@ -25,9 +25,9 @@ const classes = {
 class Login extends React.Component<ILoginProps, ILoginState> {
   constructor(props: ILoginProps) {
     super(props);
-
-    this.state = { name: "", password: "" };
+    this.state = { name: "swayam.siddha", password: "testNote123" };
   }
+
 
   _handleDelete = () => {
     this.setState({ name: "", password: "" });
