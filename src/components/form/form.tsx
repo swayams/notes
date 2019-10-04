@@ -1,15 +1,17 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router";
 import { Grid, TextField, Button } from "@material-ui/core";
-import "./form.scss";
+import "./Form.scss";
 import { IService, Note } from "../../entities/Notes";
+import { blankNote } from "../../static/state";
+import { Paths } from '../../static/routes';
 
 export interface MatchParams {
   id: string;
 }
 
 export interface INoteProps extends RouteComponentProps<MatchParams> {
-  svc: IService;
+  service: IService;
 }
 
 export interface INoteState {
@@ -24,42 +26,40 @@ const classes = {
   buttonGroup: "button-group"
 };
 
-const EMPTY_NOTE = new Note("", "");
-
 class NoteForm extends React.Component<INoteProps, INoteState> {
   constructor(props: INoteProps) {
     super(props);
-    let note = EMPTY_NOTE;
+    let note = blankNote;
     if (this.props.match && this.props.match.params.id) {
-      note = this.props.svc.read(this.props.match.params.id);
+      note = this.props.service.read(this.props.match.params.id);
     }
 
-    this.state = { note: {...note} };
+    this.state = { note: { ...note } };
   }
 
   componentDidMount() {
-    if (!this.props.svc.read(1)) {
-      this.props.history.push("/");
+    if (!this.props.service.read(1)) {
+      this.props.history.push(Paths.ROOT);
     }
   }
 
   _handleDelete = () => {
-    this.setState({ note: EMPTY_NOTE });
-    this.props.history.push("/notes");
+    this.setState({ note: blankNote });
+    this.props.history.push(Paths.NOTES);
   };
 
   _onSubmit = () => {
     const { title, description } = { ...this.state.note };
 
     const note = new Note(title, description);
-    const service = this.props.svc;
+    const service = this.props.service;
     if (this.props.match && this.props.match.params.id) {
       service.update(this.props.match.params.id, note);
     } else {
       service.create(note);
     }
 
-    this.props.history.push("/notes");
+    this.props.history.push(Paths.NOTES);
   };
 
   _handleChange = (event: React.ChangeEvent) => {
@@ -83,7 +83,7 @@ class NoteForm extends React.Component<INoteProps, INoteState> {
         alignItems="center"
         justify="center"
       >
-        <Grid item xs={10} md={4}>
+        <Grid item xs={10}>
           <TextField
             id="title"
             label="Title"
@@ -93,12 +93,13 @@ class NoteForm extends React.Component<INoteProps, INoteState> {
             fullWidth
           />
         </Grid>
-        <Grid item xs={10} md={4}>
+        <Grid item xs={10}>
           <TextField
             id="description"
             label="Description"
             className={classes.textField}
-            rows={4}
+            multiline
+            rows={1}
             rowsMax={7}
             onChange={this._handleChange}
             value={this.state.note.description}

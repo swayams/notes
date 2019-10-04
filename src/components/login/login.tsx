@@ -1,10 +1,11 @@
 import * as React from "react";
 import { TextField, Grid, Button } from "@material-ui/core";
 
-import "./login.scss";
+import "./Login.scss";
 import { UserService } from "../../entities/User";
 import { LocaleContext } from "../../entities/Context";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { initialLoginState, blankLoginState } from "../../static/state";
 
 export interface ILoginProps extends RouteComponentProps<any> {
   init: Function;
@@ -13,24 +14,23 @@ export interface ILoginProps extends RouteComponentProps<any> {
 export interface ILoginState {
   name: string;
   password: string;
+  error: string
 }
 
 const classes = {
   root: "loginForm",
-  textField: "input",
-  button: "button",
-  buttonGroup: "button-group"
+  buttonGroup: "button-group",
+  error: 'error'
 };
 
 class Login extends React.Component<ILoginProps, ILoginState> {
   constructor(props: ILoginProps) {
     super(props);
-    this.state = { name: "swayam.siddha", password: "testNote123" };
+    this.state = initialLoginState;
   }
 
-
   _handleDelete = () => {
-    this.setState({ name: "", password: "" });
+    this.setState({ ...blankLoginState });
   };
 
   _onSubmit = () => {
@@ -38,12 +38,11 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     let usrSvc = UserService(ctx);
 
     let isValid = usrSvc.validate(this.state.name, this.state.password);
-    if (isValid) {
-      alert(" Welcome !");
+    if (isValid) {      
       this.props.init(this.state.name, ctx);
       this.props.history.push("/notes/");
     } else {
-      alert("failure");
+      this.setState({error: 'Login Failed. Incorrect User Name or Password'})
     }
   };
 
@@ -67,11 +66,11 @@ class Login extends React.Component<ILoginProps, ILoginState> {
         alignItems="center"
         justify="center"
       >
+       
         <Grid item xs={10} md={4}>
           <TextField
             id="name"
             label="Username"
-            className={classes.textField}
             value={this.state.name}
             onChange={this._handleChange}
             fullWidth
@@ -81,12 +80,15 @@ class Login extends React.Component<ILoginProps, ILoginState> {
           <TextField
             id="password"
             label="Password"
-            className={classes.textField}
             type="password"
             onChange={this._handleChange}
             value={this.state.password}
             fullWidth
           />
+        </Grid>
+
+        <Grid item xs={10} md={8} className={classes.error} >
+          {this.state.error}
         </Grid>
 
         <Grid
@@ -99,7 +101,6 @@ class Login extends React.Component<ILoginProps, ILoginState> {
           <Grid item xs={8} md={4}>
             <Button
               variant="contained"
-              className={classes.button}
               color="primary"
               fullWidth
               onClick={this._onSubmit}
@@ -112,7 +113,6 @@ class Login extends React.Component<ILoginProps, ILoginState> {
               variant="contained"
               color="secondary"
               fullWidth
-              className={classes.button}
               onClick={this._handleDelete}
             >
               Cancel

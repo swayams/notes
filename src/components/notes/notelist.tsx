@@ -8,11 +8,12 @@ import {
 } from "@material-ui/core";
 import Note from "../note/Note";
 
-import "./notes.scss";
+import "./Notelist.scss";
 
 import AddCircleOutlinedIcon from "@material-ui/icons/AddCircleOutlined";
 import { withRouter, RouteComponentProps } from "react-router";
 import { IService } from '../../entities/Notes';
+import { Paths } from '../../static/routes';
 
 const classes = {
   addButton: "add",
@@ -36,13 +37,15 @@ class NoteList extends React.Component<INoteListProps, INoteListState> {
 
   componentDidMount () {
     if (this.props.user.displayName === '') {
-      this.props.history.push('/')
+      this.props.history.push(Paths.ROOT)
     }
   }
 
   _new = () => {
-    this.props.history.push("/note");
+    this.props.history.push(Paths.NOTE);
   };
+
+
   render() {
     return (
       <Grid

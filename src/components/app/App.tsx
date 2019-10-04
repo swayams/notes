@@ -3,17 +3,19 @@ import { Route } from "react-router-dom";
 
 import Grid from "@material-ui/core/Grid";
 
-import Login from "../login/login";
-import NoteList from "../notes/notelist";
+import Login from "../login/Login";
+import NoteList from "../notes/Notelist";
 
 import "./App.scss";
 import { LocaleContext } from "../../entities/Context";
 import { User } from "../../entities/User";
-import NoteForm from "../form/form";
+import NoteForm from "../form/Form";
 import { NotesService, IService } from "../../entities/Notes";
+import { blankNotesService, blankUser, blankContext } from "../../static/state";
+import Nav from "../nav/Nav";
+import { Paths } from '../../static/routes';
 
 const classes = {
-  paper: "content",
   root: "container"
 };
 
@@ -22,55 +24,56 @@ export interface IAppProps {}
 export interface IAppState {
   user: User;
   context: LocaleContext;
+  notesSvc: IService;
 }
 
 class App extends React.Component<IAppProps, IAppState> {
-  notesSvc: IService;
-
   constructor(props: IAppProps) {
     super(props);
-    this.state = { user: new User("", "", ""), context: new LocaleContext("") };
-
-    this.notesSvc = {
-      create: () => { return false },
-      update: () => { return false },
-      remove: () => { return false },
-      read: () => {  return false }
+    this.state = {
+      user: blankUser,
+      context: blankContext,
+      notesSvc: blankNotesService
     };
   }
 
   initSession = (userName: string, context: LocaleContext) => {
     let user = context.Users.filter(user => user.userName === userName)[0];
-    this.setState({ user: user, context: context });
-    this.notesSvc = NotesService(user, context);
+    this.setState({
+      user: user,
+      context: context,
+      notesSvc: NotesService(user, context)
+    });
   };
 
   render() {
+    const { notesSvc, user, ...rest } = { ...this.state };
+
     return (
       <Grid container spacing={2} max-width="sm" className={classes.root}>
-        <Grid item xs={12}></Grid>
+        <Grid item xs={12}>
+          <Nav></Nav>
+        </Grid>
         <Grid item xs={12}>
           <Route
             exact
-            path="/"
+            path= {Paths.ROOT}
             component={() => <Login init={this.initSession} />}
           />
           <Route
             exact
-            path="/notes"
-            component={() => (
-              <NoteList user={this.state.user} service={this.notesSvc} />
-            )}
+            path={Paths.NOTES}
+            component={() => <NoteList user={user} service={notesSvc} />}
           />
           <Route
             exact
-            path="/note"
-            component={() => <NoteForm svc={this.notesSvc} />}
+            path={Paths.NOTE}
+            component={() => <NoteForm service={notesSvc} />}
           />
           <Route
             exact
-            path="/note/:id"
-            component={() => <NoteForm svc={this.notesSvc} />}
+            path={`${Paths.NOTE}/:id`}
+            component={() => <NoteForm service={notesSvc} />}
           />
         </Grid>
       </Grid>

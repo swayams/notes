@@ -1,39 +1,26 @@
-@import '../../static/variables.scss';
+@import "../../static/variables.scss";
 
 .navigation {
-    width: 100%;
-    padding: 5px;
-    background-color: $grey-lighter;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+  width: 100%;
+  height: 3em;
+  line-height: 3em;
+  background-color: $grey-lighter;
 
-    .link {
-        text-decoration: none;
-        text-transform: uppercase;
-        margin: 0 5px;
-      
-        padding: 5px 10px;
-       
+  .link {
+    float: right;
+    text-transform: uppercase;
+    margin: 0 2em;
+    text-decoration: none;
+    font-family: "Gill Sans", "Gill Sans MT", "Calibri", "Trebuchet MS",
+      sans-serif;
+    color: $blue-default;
+    font-size: 1.25em;
+    padding: 0 1em;
+    outline: none;
 
-        
-        color:$blue-default;
-        
-
-
-        &:hover {
-            box-shadow: 0 3px 2px -2px $blue-default;
-            
-        }
-
-        &.icon {
-           
-            font-size: 1em;
-            line-height: 1em;
-            height: 1em;;
-            font-weight: bold;
-            
-            
-        }
+    &:hover {
+      background-color: $blue-default;
+      color: white;
     }
+  }
 }
