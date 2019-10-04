@@ -1,3 +1,16 @@
+
+Implementation is a minimum viable product that serves all requirements ( login + crud ). Signifcant quality of life and code improvements can be done. 
+
+1. Better typings 
+2. A simple state management system
+3. test cases. 
+
+configuration file -
+
+src/static/config.ts
+
+
+---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
