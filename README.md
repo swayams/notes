@@ -4,6 +4,7 @@ Implementation is a minimum viable product that serves all requirements ( login 
 1. Better typings 
 2. A simple state management system
 3. test cases. 
+4. Error Handling
 
 configuration file -
 
