@@ -38,7 +38,9 @@ class NoteForm extends React.Component<INoteProps, INoteState> {
   }
 
   componentDidMount() {
-    if (!this.props.service.read(1)) {
+    let item =  this.props.service.read(0)
+
+    if (typeof item === "boolean" && item === false) {
       this.props.history.push(Paths.ROOT);
     }
   }

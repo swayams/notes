@@ -105,7 +105,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
               fullWidth
               onClick={this._onSubmit}
             >
-              Sumbit
+              Submit
             </Button>
           </Grid>
           <Grid item xs={8} md={4}>

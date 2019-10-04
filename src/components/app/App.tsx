@@ -39,11 +39,14 @@ class App extends React.Component<IAppProps, IAppState> {
 
   initSession = (userName: string, context: LocaleContext) => {
     let user = context.Users.filter(user => user.userName === userName)[0];
+    let svc = NotesService(user, context)
+    console.log(svc)
     this.setState({
       user: user,
       context: context,
-      notesSvc: NotesService(user, context)
-    });
+      notesSvc: svc
+    } );
+    
   };
 
   render() {
